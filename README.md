@@ -1,49 +1,51 @@
-# Singleton Design Pattern with Orthogonal Policies
+# Коллоквиум 2 по ОС: Шаблон Singleton с ортогональными стратегиями
 
-This project implements a powerful and flexible Singleton Design Pattern in C++ using orthogonal strategies, as described in Chapter 6 of Andrei Alexandrescu's *Modern C++ Design* and inspired by the Loki library. The implementation separates concerns into independent policies for creation, threading, and lifetime management, with a focus on thread-safety for multi-threaded environments.
+Этот проект реализует мощный и гибкий шаблон проектирования Singleton на C++ с использованием ортогональных стратегий, описанных в главе 6 книги Андрея Александреску *Modern C++ Design* и вдохновленных библиотекой Loki. Реализация разделяет ответственность на независимые политики управления созданием, синхронизацией и временем жизни объекта, с акцентом на потокобезопасность для многопоточных сред.
 
-## Features
+## Возможности
 
-- **Orthogonal Policies**:
-  - **Creation Policy**: Manages object creation and destruction (default: `new`/`delete`).
-  - **Threading Policy**: Ensures thread-safety using double-checked locking with `std::mutex` and `std::atomic`.
-  - **Lifetime Policy**: Controls the Singleton's lifetime (default: destruction at program exit via `std::atexit`).
-- **Modern C++**: Uses C++11+ features (`std::mutex`, `std::atomic`, templates).
-- **Extensibility**: Easily customizable by defining new policies.
-- **Thread-Safe**: Optimized for multi-threaded environments with minimal locking overhead.
+- **Ортогональные политики**:
+  - **Политика создания**: Управляет созданием и уничтожением объекта (по умолчанию: `new`/`delete`).
+  - **Политика синхронизации**: Обеспечивает потокобезопасность с использованием двойной проверки блокировки с `std::mutex` и `std::atomic`.
+  - **Политика времени жизни**: Контролирует жизненный цикл Singleton (по умолчанию: уничтожение при завершении программы через `std::atexit`).
+- **Современный C++**: Использует возможности C++11+ (`std::mutex`, `std::atomic`, шаблоны).
+- **Расширяемость**: Легко настраивается путем определения новых политик.
+- **Потокобезопасность**: Оптимизирован для многопоточных сред с минимальными накладными расходами на блокировку.
 
-## Files
+## Файлы
 
-- `singleton.hpp`: Header file containing the Singleton template and policy implementations.
-- `main.cpp`: Example usage of the Singleton with a simple `Example` class.
+- `singleton.hpp`: Заголовочный файл, содержащий шаблон Singleton и реализации политик.
+- `main.cpp`: Пример использования Singleton с простым классом `Example`.
 
-## Prerequisites
+## Требования
 
-- C++11 or later compatible compiler (e.g., `g++`, `clang++`, MSVC).
-- Standard C++ library with support for `<mutex>`, `<atomic>`, and `<memory>`.
+- Компилятор, совместимый с C++11 или новее (например, `g++`, `clang++`, MSVC).
+- Стандартная библиотека C++ с поддержкой `<mutex>`, `<atomic>` и `<memory>`.
 
-## Build Instructions
+## Инструкции по сборке
 
-1. Clone the repository:
+1. Клонируйте репозиторий:
 
    ```bash
    git clone git@github.com:axillles/OS_coloc2.git
    cd OS_coloc2
    ```
-2. Compile the code:
+
+2. Скомпилируйте код:
 
    ```bash
    g++ -std=c++11 main.cpp -o singleton
    ```
-3. Run the program:
+
+3. Запустите программу:
 
    ```bash
    ./singleton
    ```
 
-## Usage Example
+## Пример использования
 
-The `main.cpp` file demonstrates how to use the Singleton:
+Файл `main.cpp` демонстрирует, как использовать Singleton:
 
 ```cpp
 #include "singleton.hpp"
@@ -52,7 +54,7 @@ The `main.cpp` file demonstrates how to use the Singleton:
 class Example {
 public:
     void print() const {
-        std::cout << "Singleton instance at " << this << std::endl;
+        std::cout << "Экземпляр Singleton по адресу " << this << std::endl;
     }
 };
 
@@ -61,42 +63,42 @@ int main() {
     instance1.print();
 
     Example& instance2 = Singleton<Example>::instance();
-    instance2.print(); // Same instance
+    instance2.print(); // Должен вывести тот же адрес
     return 0;
 }
 ```
 
-Expected output:
+Ожидаемый вывод:
 
 ```
-Singleton instance at 0x...
-Singleton instance at 0x...  // Same address
+Экземпляр Singleton по адресу 0x...
+Экземпляр Singleton по адресу 0x...  // Тот же адрес
 ```
 
-## Extending the Singleton
+## Расширение Singleton
 
-To customize the Singleton, define new policies:
+Для настройки Singleton определите новые политики:
 
-- **Creation Policy**: Implement a new class with `static T* create()` and `static void destroy(T*)`.
-- **Threading Policy**: Provide a new class with `static std::mutex& get_mutex()`.
-- **Lifetime Policy**: Define a new class with `static void schedule_destruction(T*, void (*)())`.
+- **Политика создания**: Реализуйте новый класс с методами `static T* create()` и `static void destroy(T*)`.
+- **Политика синхронизации**: Создайте новый класс с методом `static std::mutex& get_mutex()`.
+- **Политика времени жизни**: Определите новый класс с методом `static void schedule_destruction(T*, void (*)())`.
 
-Example of a custom policy:
+Пример пользовательской политики:
 
 ```cpp
 template <typename T>
 struct CustomCreationPolicy {
-    static T* create() { return new T(42); } // Custom constructor
+    static T* create() { return new T(42); } // Пользовательский конструктор
     static void destroy(T* obj) { delete obj; }
 };
 
 using CustomSingleton = Singleton<Example, CustomCreationPolicy>;
 ```
 
-## Contributing
+## Вклад в проект
 
-Feel free to submit issues or pull requests to the repository at `git@github.com:axillles/OS_coloc2.git`.
+Приглашаем отправлять сообщения об ошибках или запросы на включение изменений в репозиторий по адресу `git@github.com:axillles/OS_coloc2.git`.
 
-## License
+## Лицензия
 
-This project is licensed under the MIT License.
+Проект распространяется под лицензией MIT.
