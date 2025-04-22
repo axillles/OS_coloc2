@@ -94,11 +94,3 @@ struct CustomCreationPolicy {
 
 using CustomSingleton = Singleton<Example, CustomCreationPolicy>;
 ```
-
-## Вклад в проект
-
-Приглашаем отправлять сообщения об ошибках или запросы на включение изменений в репозиторий по адресу `git@github.com:axillles/OS_coloc2.git`.
-
-## Лицензия
-
-Проект распространяется под лицензией MIT.
